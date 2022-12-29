@@ -24,7 +24,8 @@ void AC_Movable::BeginPlay()
 	Super::BeginPlay();
 	
 	GI = Cast<UC_ReverseGI>(GetGameInstance());
-	if (!(GI->IsValidLowLevel())) {
+	if (!(GI->IsValidLowLevel()))
+	{
 		UE_LOG(LogClass, Warning, TEXT("GameInstance Cast Fail! Fatal Error!!!"));
 	}
 }
@@ -33,31 +34,31 @@ void AC_Movable::BeginPlay()
 void AC_Movable::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (Reversable) {
-		if (GI) {
-			if (GI->GetReverseStatus()) {		// 되돌리기 활성화.
-												// Location Set.
-
-												//Position array 가져 옴.
-												//마지막 Index 를 얻어옴.
-
-												// SetworldTransfrom(without Scale)
+	if (Reversable)
+	{
+		if (GI)
+		{
+			if (GI->GetReverseStatus())
+			{
 				FTransform TempTransform;
-				if (Positions.IsValidIndex(Positions.Num() - 1)) {
+				if (Positions.IsValidIndex(Positions.Num() - 1))
+				{
 					TempTransform.SetLocation(Positions.Last().Location);
 					TempTransform.SetRotation(Positions.Last().Rotation);
 					TempTransform.SetScale3D(GetActorScale());
 				}
 				Mesh->SetWorldTransform(TempTransform);
 				// 마지막 인덱스가 0보다 큰지 확인.
-				if (Positions.Num() > 1) {
+				if (Positions.Num() > 1)
+				{
 					// 맞을경우 마지막 인덱스 삭제.
 					Positions.RemoveAt(Positions.Num() - 1);
 				}
 
 				// Velocity Set.
 
-				if (Velocitys.IsValidIndex(Velocitys.Num() - 1)) {
+				if (Velocitys.IsValidIndex(Velocitys.Num() - 1))
+				{
 					// set physics liner velocity
 					Mesh->SetPhysicsLinearVelocity(Velocitys.Last().Degree);
 					// set physics Angular velocity
@@ -65,23 +66,23 @@ void AC_Movable::Tick(float DeltaTime)
 				}
 
 				// 마지막 인덱스가 0보다 킅지 확인.
-				if (Velocitys.Num() > 1) {
+				if (Velocitys.Num() > 1)
+				{
 					// 아닐경우 마지막 인덱스 삭제.
 					Velocitys.RemoveAt(Velocitys.Num() - 1);
 				}
-
-
 			}
-			else {								// 되돌리기 비활성화.
-
+			else
+			{									// 되돌리기 비활성화.
 												// 배열이 너무 길어지는것을 방지.
-				if (Positions.Num() >= 5000) {
+				if (Positions.Num() >= 5000)
+				{
 					Positions.RemoveAt(0);
 				}
-				if (Velocitys.Num() >= 5000) {
+				if (Velocitys.Num() >= 5000)
+				{
 					Velocitys.RemoveAt(0);
 				}
-
 				// Location 저장.
 				FC_S_Position TempPos = FC_S_Position(Mesh->GetComponentToWorld().GetLocation(), Mesh->GetComponentToWorld().GetRotation());
 				Positions.Emplace(TempPos);
@@ -92,9 +93,9 @@ void AC_Movable::Tick(float DeltaTime)
 			}
 		}
 	}
-	else {
+	else
+	{
 		Mesh->SetMobility(EComponentMobility::Static);
 	}
-	
 }
 
